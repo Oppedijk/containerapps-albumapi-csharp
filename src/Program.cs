@@ -31,11 +31,19 @@ app.MapGet("/", async context =>
     await context.Response.WriteAsync("Hit the <a href=\"/albums\">/albums</a> endpoint to retrieve a list of albums!");
 });
 
+
 app.MapGet("/albums", () =>
 {
     return Album.GetAll();
 })
 .WithName("GetAlbums");
+
+// Insecure open redirect endpoint for CodeQL testing
+app.MapGet("/redirect", (HttpContext context) =>
+{
+    var url = context.Request.Query["url"];
+    context.Response.Redirect(url);
+});
 
 app.Run();
 
